@@ -6,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-<%@ include file="fragments/header.jspf"%>
+<%@ include file="fragments/header.jspf" %>
 
 <a href="/SolutionAdd">Dodaj rozwiązanie</a><br><br>
 
@@ -20,8 +20,8 @@
     <tbody>
     <c:forEach items="${solutions}" var="solution">
         <tr>
-            <td>${solution.description}</td>
-            <td>user</td>
+            <td>${solution.exercise.description}</td>
+            <td>${solution.user.username}</td>
             <td><fmt:formatDate value="${solution.created}" pattern="yyyy-MM-dd HH:mm"/></td>
             <td>
                 <a href="/SolutionUpdate?id=${solution.id}">Edytuj</a>
@@ -32,6 +32,6 @@
     </tbody>
 </table>
 
-<%@ include file="fragments/footer.jspf"%>
+<%@ include file="fragments/footer.jspf" %>
 </body>
 </html>

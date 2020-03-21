@@ -1,68 +1,45 @@
 package pl.coderslab.jeeschool.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import pl.coderslab.jeeschool.model.Exercise;
 import pl.coderslab.jeeschool.model.Solution;
+import pl.coderslab.jeeschool.model.User;
 
 public class SolutionDao {
 
-    public static Solution findById(int id) {
-        List<String> params = new ArrayList<>();
-        params.add(String.valueOf(id));
-        List<Solution> list = prepareSolutions("SELECT id, description, created, updated FROM solution WHERE id=?", params);
-        if (list != null && list.size() > 0) {
-            return list.get(0);
-        }
-        return null;
-    }
-
-    public static List<Solution> findAll() {
-        return prepareSolutions("SELECT id, description, created, updated FROM solution", null);
-    }
-
-
-    public static List<Solution> findLastItems(int limit) {
-        return prepareSolutions("SELECT id, description, created, updated FROM Solutions ORDER BY id DESC LIMIT " + limit, null);
-    }
-
-    public static void delete(Solution solution) {
-        List<String> params = new ArrayList<>();
-        params.add(String.valueOf(solution.getId()));
-
+    public static List<Solution> findRecent(Connection connection, int limit) {
+        List<Solution> solutions = new ArrayList<>();
+        String query = "SELECT * FROM Solutions order by created desc limit ?";
         try {
-            DbService.executeUpdate("DELETE FROM solution WHERE id=?", params);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private static List<Solution> prepareSolutions(String q, List<String> params) {
-        List<Solution> solutions = null;
-        try {
-
-            List<String[]> list = DbService.getData(q, params);
-            solutions = new ArrayList<>();
-            for (String[] item : list) {
-                Solution solutionItem = new Solution();
-                solutionItem.setId(Integer.parseInt(item[0]));
-                solutionItem.setDescription(item[1]);
-
-                SimpleDateFormat st = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                solutionItem.setCreated(st.parse(item[2]));
-                solutionItem.setUpdated(st.parse(item[3]));
-                solutions.add(solutionItem);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, limit);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                solutions.add(getSolutionFromResultSet(connection, resultSet));
             }
-            return solutions;
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
             e.printStackTrace();
         }
         return solutions;
     }
+
+    private static Solution getSolutionFromResultSet(Connection connection, ResultSet resultSet) throws SQLException {
+        Solution loadedSolution = new Solution();
+        loadedSolution.setId(resultSet.getInt("id"));
+        loadedSolution.setCreated(resultSet.getDate("created"));
+        loadedSolution.setUpdated(resultSet.getDate("updated"));
+        loadedSolution.setDescription(resultSet.getString("description"));
+        Exercise exercise = ExerciseDao.findById(connection, resultSet.getInt("exercise_id"));
+        loadedSolution.setExercise(exercise);
+        User user = UserDao.findById(connection, resultSet.getInt("user_id"));
+        loadedSolution.setUser(user);
+        return loadedSolution;
+    }
+
 
 }

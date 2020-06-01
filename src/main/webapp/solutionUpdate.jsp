@@ -11,6 +11,7 @@
     <strong>Zadanie:</strong> ${solution.exercise.title}<br><br>
 
     <textarea rows="5" cols="80" name="description">${solution.description}</textarea><br><br>
+    <input type="hidden" name="solutionId" value="${solution.id}"><br>
 
     <input type="submit" value="Zapisz"/>
 </form>

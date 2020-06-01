@@ -21,7 +21,8 @@ public class HomeServlet extends HttpServlet {
         List<Solution> solutions = new ArrayList<>();
 
         try {
-            solutions.addAll(SolutionDao.findRecent(DbUtil.getConnection(), Integer.parseInt(numberSolutions)));
+            List<Solution> recent = SolutionDao.findRecent(DbUtil.getConnection(), Integer.parseInt(numberSolutions));
+            solutions.addAll(recent);
         } catch (SQLException e) {
             e.printStackTrace();
         }

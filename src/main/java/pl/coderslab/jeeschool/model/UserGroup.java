@@ -5,6 +5,18 @@ public class UserGroup {
     private Integer id;
     private String name;
 
+    public UserGroup() {
+    }
+
+    public UserGroup(String name) {
+        this.name = name;
+    }
+
+    public UserGroup(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }

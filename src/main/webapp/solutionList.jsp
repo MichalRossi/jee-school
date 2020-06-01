@@ -12,7 +12,7 @@
 
 <table border="1">
     <thead>
-    <th>Tytuł zadania</th>
+    <th>Treść zadania</th>
     <th>Autor rozwiązania</th>
     <th>Data dodania</th>
     <th>Akcje</th>
@@ -26,6 +26,7 @@
             <td>
                 <a href="/SolutionUpdate?id=${solution.id}">Edytuj</a>
                 <a href="/SolutionDelete?id=${solution.id}">Usuń</a>
+                <a href="/SolutionDetails?id=${solution.id}">Szczegóły</a>
             </td>
         </tr>
     </c:forEach>

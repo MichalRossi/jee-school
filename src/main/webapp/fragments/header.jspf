@@ -2,6 +2,6 @@
 <header>
     <a href="/" style="padding-right: 20px">Strona główna</a>
     <a href="/Groups" style="padding-right: 20px">Grupy</a>
-    <a href="/Admin" style="padding-right: 20px">Panel administratora</a>
+    <a href="/panelAdmin" style="padding-right: 20px">Panel administratora</a>
     <br><br>
 </header>
